@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            width: 600px;
+            display: none; /* ซ่อนฟอร์มเริ่มต้น */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 95%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        select {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result-box {
+            background: #e7f3fe;
+            border: 1px solid #b3d7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 16px;
+            display: none; /* ซ่อนกล่องผลลัพธ์เริ่มต้น */
+        }
+        pre {
+            white-space: pre-wrap; /* ทำให้ข้อความยาวแสดงในบรรทัดใหม่ */
+        }
+        .highlight {
+            color: red; /* ทำให้ตัวที่เปลี่ยนมีสีแดง */
+            font-weight: bold; /* ทำให้ตัวที่เปลี่ยนตัวหนา */
+        }
+    </style>
+</head>
+<body>
+    <div id="loginForm" class="form-container">
+        <h1>เข้าสู่ระบบ</h1>
+        <label for="password">รหัสผ่าน:</label>
+        <input type="password" id="password" name="password" required>
+        <button onclick="checkPassword()">ล็อกอิน</button>
+    </div>
+
+    <div id="storeCodeForm" class="form-container">
+        <h1>เชื่อมต่ออุปกรณ์ Access Point</h1>
+        <label for="storeCode">รหัสร้านสาขา (4 หรือ 5 หลัก):</label>
+        <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+        
+        <label for="apType">เลือก AP:</label>
+        <select id="apType" name="apType">
+            <option value="">-- เลือกประเภท AP --</option>
+            <option value="old">AP ตัวเก่า</option>
+            <option value="new">AP ตัวใหม่</option>
+        </select>
+
+        <label for="apModel">เลือกรุ่น:</label>
+        <select id="apModel" name="apModel">
+            <option value="">-- เลือกรุ่น --</option>
+            <option value="1041">1041</option>
+            <option value="1602">1602</option>
+            <option value="1702">1702</option>
+            <option value="1832">1832</option>
+            <option value="9105">9105</option>
+            <option value="9115">9115</option>
+        </select>
+
+        <label for="apSelection">เลือก AP ตัวที่:</label>
+        <select id="apSelection" name="apSelection">
+            <option value="">-- เลือก AP ตัวที่ --</option>
+            <option value="1">AP ตัวที่ 1</option>
+            <option value="2">AP ตัวที่ 2</option>
+            <option value="3">AP ตัวที่ 3</option>
+            <option value="4">AP ตัวที่ 4</option>
+            <option value="5">AP ตัวที่ 5</option>
+        </select>
+        
+        <button onclick="validateStoreCode()">ยืนยัน</button>
+        
+        <div id="resultBox" class="result-box">
+            <h2>คำสั่งที่สร้าง:</h2>
+            <pre id="commandOutput"></pre>
+            <button onclick="copyToClipboard()">คัดลอกคำสั่ง</button>
+            <button onclick="downloadCommands()">ดาวน์โหลดคำสั่งเป็นไฟล์</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').style.display = 'block';
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === '1111') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('storeCodeForm').style.display = 'block';
+            } else {
+                alert('รหัสผ่านไม่ถูกต้อง!');
+            }
+        }
+
+        function validateStoreCode() {
+            const storeCodeInput = document.getElementById('storeCode').value;
+            const apTypeInput = document.getElementById('apType').value;
+            const apModelInput = document.getElementById('apModel').value;
+            const apSelectionInput = document.getElementById('apSelection').value;
+
+            if (storeCodeInput.length === 4 && apModelInput === "1041" && apTypeInput === "old") {
+                generateCommands10414old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1602" && apTypeInput === "old") { 
+                generateCommands16024old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1702" && apTypeInput === "old") { 
+                generateCommands17024old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1832" && apTypeInput === "old") { 
+                generateCommands18324old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9105" && apTypeInput === "old") { 
+                generateCommands91054old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9115" && apTypeInput === "old") { 
+                generateCommands91154old(storeCodeInput, apSelectionInput);
+
+            } else if(storeCodeInput.length === 4 && apModelInput === "1041" && apTypeInput === "new") {
+                generateCommands10414new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1602" && apTypeInput === "new") { 
+                generateCommands16024new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1702" && apTypeInput === "new") { 
+                generateCommands17024new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1832" && apTypeInput === "new") { 
+                generateCommands18324new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9105" && apTypeInput === "new") { 
+                generateCommands91054new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9115" && apTypeInput === "new") { 
+                generateCommands91154new(storeCodeInput, apSelectionInput);
+
+            } else if(storeCodeInput.length === 5 && apModelInput === "1041" && apTypeInput === "old") {
+                generateCommands10415old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1602" && apTypeInput === "old") { 
+                generateCommands16025old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1702" && apTypeInput === "old") { 
+                generateCommands17025old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1832" && apTypeInput === "old") { 
+                generateCommands18325old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9105" && apTypeInput === "old") { 
+                generateCommands91055old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9115" && apTypeInput === "old") { 
+                generateCommands91155old(storeCodeInput, apSelectionInput);
+
+            } else if(storeCodeInput.length === 5 && apModelInput === "1041" && apTypeInput === "new") {
+                generateCommands10415new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1602" && apTypeInput === "new") { 
+                generateCommands16025new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1702" && apTypeInput === "new") { 
+                generateCommands17025new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1832" && apTypeInput === "new") { 
+                generateCommands18325new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9105" && apTypeInput === "new") { 
+                generateCommands91055new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9115" && apTypeInput === "new") { 
+                generateCommands91155new(storeCodeInput, apSelectionInput);
+                
+            } else {}
+        }
+
+        function generateCommands10414old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands16024old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands17024old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands18324old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91054old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91154old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+        }
+
+
+        function generateCommands10414new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands16024new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands17024new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands18324new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91054new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91154new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+
+
+
+
+
+            function generateCommands10415old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands16025old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands17025old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands18325old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91055old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91155old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin',
+                'Store2015',
+                'enable',
+                'Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+            function generateCommands10415new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands16025new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config'
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands17025new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands18325new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91055new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91155new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco',
+                'Cisco',
+                'enable',
+                'Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config'
+            ];
+
+            displayCommands(commands);
+        }
+
+        function displayCommands(commands) {
+            document.getElementById('commandOutput').innerHTML = commands.join('\n');
+            document.getElementById('resultBox').style.display = 'block';
+        }
+
+        function copyToClipboard() {
+            const commandOutput = document.getElementById('commandOutput').innerText;
+            navigator.clipboard.writeText(commandOutput).then(() => {
+                alert('คัดลอกคำสั่งเรียบร้อยแล้ว!');
+            }).catch(err => {
+                alert('ไม่สามารถคัดลอกคำสั่งได้: ', err);
+            });
+        }
+
+        function downloadCommands() {
+            const commandOutput = document.getElementById('commandOutput').innerText;
+            const blob = new Blob([commandOutput], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'commands.txt'; // ชื่อไฟล์ที่ต้องการดาวน์โหลด
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
