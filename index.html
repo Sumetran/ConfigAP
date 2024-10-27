@@ -90,19 +90,19 @@
     <div id="loginForm" class="form-container">
         <h1>เข้าสู่ระบบ</h1>
         <label for="password">รหัสผ่าน:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required placeholder="กรุณากรอกรหัสผ่านที่นี่">
         <button onclick="checkPassword()">ล็อกอิน</button>
         <footer>
             <h4>พัฒนาโดย</h4>
             <h4>ศุเมธาณร์ เกิดผล ช่างเทคนิค</h4>
-            <h4>Email: sumetranthailand@gmail.com & ID Line: sumetran_kertpol</h4>
+            <h6>Email: sumetranthailand@gmail.com & ID Line: sumetran_kertpol</h6>
         </footer>
     </div>
 
     <div id="storeCodeForm" class="form-container">
         <h1>เชื่อมต่ออุปกรณ์ Access Point</h1>
         <label for="storeCode">รหัสร้านสาขา (4 หรือ 5 หลัก):</label>
-        <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+        <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');"placeholder="รหัสร้าน 4 หลักไม่ต้องใส่ 0 ก่อนหน้า เช่น 1234 , 4321">
         
         <label for="apType">เลือกประเภท AP:</label>
         <select id="apType" name="apType">
