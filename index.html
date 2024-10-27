@@ -17,7 +17,14 @@
             background: #ffffff;
             padding: 50px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            box-shadow: 0 0 15px #00000033;
+            display: none; /* ซ่อนฟอร์มเริ่มต้น */
+        }
+        .form1-container {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #00000033;
             display: none; /* ซ่อนฟอร์มเริ่มต้น */
         }
         h1 {
@@ -29,7 +36,7 @@
             width: 95%;
             padding: 15px;
             margin: 15px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #cccccc;
             border-radius: 5px;
             font-size: 16px;
         }
@@ -37,7 +44,7 @@
             width: 100%;
             padding: 15px;
             margin: 15px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #cccccc;
             border-radius: 5px;
             font-size: 16px;
         }
@@ -46,7 +53,7 @@
             padding: 15px;
             margin: 15px 0;
             background-color: #4CAF50;
-            color: white;
+            color: #ffffff;
             border: none;
             cursor: pointer;
             border-radius: 5px;
@@ -70,24 +77,25 @@
             white-space: pre-wrap; /* ทำให้ข้อความยาวแสดงในบรรทัดใหม่ */
         }
         .highlight {
-            color: red; /* ทำให้ตัวที่เปลี่ยนมีสีแดง */
+            color: #ff0000; /* ทำให้ตัวที่เปลี่ยนมีสีแดง */
             font-weight: bold; /* ทำให้ตัวที่เปลี่ยนตัวหนา */
         }
         footer{ 
+            margin-top: 20px;
             background: #ffffff;
-            color: rgb(145, 145, 145);
+            color: #919191;
             text-align: center;
             position: relative;
             bottom: 0;
             padding: 1px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            box-shadow: 0 0 15px #00000033;
         }
 
     </style>
 </head>
 <body>
-    <div id="loginForm" class="form-container">
+    <div id="loginForm" class="form1-container">
         <h1>เข้าสู่ระบบ</h1>
         <label for="password">รหัสผ่าน:</label>
         <input type="password" id="password" name="password" required placeholder="กรุณากรอกรหัสผ่านที่นี่">
@@ -101,8 +109,8 @@
 
     <div id="storeCodeForm" class="form-container">
         <h1>เชื่อมต่ออุปกรณ์ Access Point</h1>
-        <label for="storeCode">รหัสร้านสาขา (4 หรือ 5 หลัก):</label>
-        <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');"placeholder="รหัสร้าน 4 หลักไม่ต้องใส่ 0 ก่อนหน้า เช่น 1234 , 4321">
+        <label for="storeCode">ใส่รหัสร้านสาขา (4 หรือ 5 หลัก):</label>
+        <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');"placeholder="รหัสร้าน 4 หลักไม่ต้องใส่ 0 นำหน้า เช่น 1234 , 4321 , 8899">
         
         <label for="apType">เลือกประเภท AP:</label>
         <select id="apType" name="apType">
@@ -226,10 +234,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco' ,
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
+                'Store2015 / Cisco',
                 `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.13`,
@@ -244,10 +252,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
+                'Store2015 / Cisco',
                 `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -263,10 +271,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
+                'Store2015 / Cisco',
                 `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -281,11 +289,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
-                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'Store2015 / Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC03 10.160.103.43',
                 'show capwap ip config',
             ];
@@ -298,11 +306,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
-                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'Store2015 / Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -315,11 +323,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
-                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'Store2015 / Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -332,10 +340,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
+                'Cisco / Store2015',
                 `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.13`,
@@ -350,10 +358,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
+                'Cisco / Store2015',
                 `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -368,10 +376,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
+                'Cisco / Store2015',
                 `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -386,11 +394,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
-                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'Cisco / Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC03 10.160.103.43',
                 'show capwap ip config',
             ];
@@ -403,11 +411,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
-                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'Cisco / Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -420,11 +428,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
-                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'Cisco / Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -442,10 +450,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
+                'Store2015 / Cisco',
                 `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.13`,
@@ -459,10 +467,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
+                'Store2015 / Cisco',
                 `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -476,10 +484,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
+                'Store2015 / Cisco',
                 `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -493,11 +501,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
-                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'Store2015 / Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC03 10.160.103.43',
                 'show capwap ip config',
             ];
@@ -509,11 +517,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
-                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'Store2015 / Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -525,11 +533,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'admin',
-                'Store2015',
+                'admin / Cisco',
+                'Store2015 / Cisco',
                 'enable',
-                'Store2015',
-                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'Store2015 / Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -541,10 +549,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
+                'Cisco / Store2015',
                 `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.13`,
@@ -558,10 +566,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
+                'Cisco / Store2015',
                 `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -575,10 +583,10 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
+                'Cisco / Store2015',
                 `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
                 `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
                 `capwap ap controller ip address 10.160.103.43`,
@@ -592,11 +600,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
-                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'Cisco / Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC03 10.160.103.43',
                 'show capwap ip config',
             ];
@@ -608,11 +616,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
-                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'Cisco / Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config',
             ];
@@ -624,11 +632,11 @@
             const abcd = storeCode;
 
             const commands = [
-                'Cisco',
-                'Cisco',
+                'Cisco / admin',
+                'Cisco / Store2015',
                 'enable',
-                'Cisco',
-                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'Cisco / Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
                 'capwap ap primary-base TARWLC07 10.160.103.69',
                 'show capwap ip config'
             ];
