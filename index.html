@@ -18,7 +18,6 @@
             padding: 50px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            width: 600px;
             display: none; /* ซ่อนฟอร์มเริ่มต้น */
         }
         h1 {
@@ -76,6 +75,7 @@
         }
         footer{ 
             background: #ffffff;
+            color: rgb(145, 145, 145);
             text-align: center;
             position: relative;
             bottom: 0;
@@ -95,6 +95,7 @@
         <footer>
             <h4>พัฒนาโดย</h4>
             <h4>ศุเมธาณร์ เกิดผล ช่างเทคนิค</h4>
+            <h4>Email: sumetranthailand@gmail.com & ID Line: sumetran_kertpol</h4>
         </footer>
     </div>
 
@@ -103,16 +104,16 @@
         <label for="storeCode">รหัสร้านสาขา (4 หรือ 5 หลัก):</label>
         <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
         
-        <label for="apType">เลือก AP:</label>
+        <label for="apType">เลือกประเภท AP:</label>
         <select id="apType" name="apType">
             <option value="">-- เลือกประเภท AP --</option>
             <option value="old">AP ตัวเก่า</option>
             <option value="new">AP ตัวใหม่</option>
         </select>
 
-        <label for="apModel">เลือกรุ่น:</label>
+        <label for="apModel">เลือกรุ่น AP:</label>
         <select id="apModel" name="apModel">
-            <option value="">-- เลือกรุ่น --</option>
+            <option value="">-- เลือกรุ่น AP --</option>
             <option value="1041">1041</option>
             <option value="1602">1602</option>
             <option value="1702">1702</option>
@@ -137,12 +138,13 @@
             <h2>คำสั่งที่สร้าง:</h2>
             <pre id="commandOutput"></pre>
             <button onclick="copyToClipboard()">คัดลอกคำสั่ง</button>
-            <button onclick="downloadCommands()">ดาวน์โหลดคำสั่งเป็นไฟล์</button>
+            <button onclick="downloadCommands()">ดาวน์โหลดคำสั่งเป็นไฟล์ .txt</button>
         </div>
 
          <footer>
             <h4>พัฒนาโดย</h4>
             <h4>ศุเมธาณร์ เกิดผล ช่างเทคนิค</h4>
+            <h4>Email: sumetranthailand@gmail.com & ID Line: sumetran_kertpol</h4>
         </footer>
     </div>
 
@@ -653,7 +655,7 @@
             const blob = new Blob([commandOutput], { type: 'text/plain' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'commands.txt'; // ชื่อไฟล์ที่ต้องการดาวน์โหลด
+            link.download = 'คำสั่งที่สร้าง.txt'; // ชื่อไฟล์ที่ต้องการดาวน์โหลด
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
