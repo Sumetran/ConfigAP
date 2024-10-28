@@ -51,7 +51,7 @@
         button {
             width: 100%;
             padding: 15px;
-            margin: 15px 0;
+            margin: 10px 0;
             background-color: #4CAF50;
             color: #ffffff;
             border: none;
@@ -66,10 +66,10 @@
         }
 
         button1 {
-            margin: 15px 0;
+            margin: 100px 0;
             width: 100%;
             padding: 15px;
-            background-color: #4CAF50;
+            background-color: #e7b10a;
             color: #ffffff;
             border: none;
             cursor: pointer;
@@ -80,7 +80,7 @@
         button1:active {
             transition: transform 0.3s ease; /* การเปลี่ยนแปลง */
             transform: scale(0.95); /* ขนาดเมื่อคลิก */
-            background-color: #45a049; /* เปลี่ยนสีเมื่อคลิก */
+            background-color: #d4bc74; /* เปลี่ยนสีเมื่อคลิก */
         }
 
         .result-box {
@@ -160,19 +160,20 @@
         </select>
         
         <button onclick="validateStoreCode()">ยืนยัน</button>
-        
+        <h1></h1>
+        <h1></h1>
+        <button1 onclick="decreaseFontSize1()" >-- ย่อขนาดฟอนต์</button1>
+        <button1 onclick="decreaseFontSize2()" >++ เพิ่มขนาดฟอนต์</button1>
+
         <div id="resultBox" class="result-box">
             <h2>คำสั่งที่สร้าง:</h2>
             <pre id="commandOutput"></pre>
-            <h4></h4>
-            <button1 onclick="decreaseFontSize1()">ย่อขนาดฟอนต์</button1>
-            <button1 onclick="decreaseFontSize2()">เพิ่มขนาดฟอนต์</button1>
-            <h4></h4>
+            
+            <button class="button" onclick="window.location.href='https://drive.google.com/file/d/1oNBMWLCyphCE8JfQoWVckKdeQb2RatIo/view?usp=drive_link'">คู่มือการ ConfigAP</button>
             <button onclick="copyToClipboard()">คัดลอกคำสั่ง</button>
             <button onclick="downloadCommands()">ดาวน์โหลดคำสั่งเป็นไฟล์ .txt</button>
 
         </div>
-
          <footer>
             <h4>พัฒนาโดย</h4>
             <h4>ศุเมธาณร์ เกิดผล ช่างเทคนิค</h4>
