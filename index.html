@@ -64,13 +64,32 @@
             transform: scale(0.95); /* ขนาดเมื่อคลิก */
             background-color: #45a049; /* เปลี่ยนสีเมื่อคลิก */
         }
+
+        button1 {
+            margin: 15px 0;
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button1:active {
+            transition: transform 0.3s ease; /* การเปลี่ยนแปลง */
+            transform: scale(0.95); /* ขนาดเมื่อคลิก */
+            background-color: #45a049; /* เปลี่ยนสีเมื่อคลิก */
+        }
+
         .result-box {
             background: #e7f3fe;
             border: 1px solid #b3d7ff;
             padding: 15px;
             border-radius: 5px;
             margin-top: 20px;
-            font-size: 8px;
+            font-size: 16px;
             display: none; /* ซ่อนกล่องผลลัพธ์เริ่มต้น */
         }
         pre {
@@ -145,8 +164,13 @@
         <div id="resultBox" class="result-box">
             <h2>คำสั่งที่สร้าง:</h2>
             <pre id="commandOutput"></pre>
+            <h4></h4>
+            <button1 onclick="decreaseFontSize1()">ย่อขนาดฟอนต์</button1>
+            <button1 onclick="decreaseFontSize2()">เพิ่มขนาดฟอนต์</button1>
+            <h4></h4>
             <button onclick="copyToClipboard()">คัดลอกคำสั่ง</button>
             <button onclick="downloadCommands()">ดาวน์โหลดคำสั่งเป็นไฟล์ .txt</button>
+
         </div>
 
          <footer>
@@ -167,6 +191,20 @@
             } else {
                 alert('รหัสผ่านไม่ถูกต้อง!');
             }
+        }
+
+        function decreaseFontSize1() {
+            const text = document.getElementById('resultBox');
+            let currentSize = window.getComputedStyle(text).fontSize;
+            let newSize = parseFloat(currentSize) - 2; // ลดขนาดฟอนต์ 2px
+            text.style.fontSize = newSize + 'px';
+        }
+
+        function decreaseFontSize2() {
+            const text = document.getElementById('resultBox');
+            let currentSize = window.getComputedStyle(text).fontSize;
+            let newSize = parseFloat(currentSize) + 2; // ลดขนาดฟอนต์ 2px
+            text.style.fontSize = newSize + 'px';
         }
 
         function validateStoreCode() {
