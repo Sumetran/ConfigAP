@@ -235,7 +235,7 @@
         pre {
             padding: 12px 16px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(9px, 2.5vw, var(--code-font-size));
+            font-size: clamp(5px, 2.5vw, var(--code-font-size));
             letter-spacing: -0.3px;
             line-height: 1.6;
             color: #38bdf8;
@@ -381,6 +381,8 @@
                 <div class="result-header">
                     <span class="result-title">คำสั่งที่ถูกสร้างขึ้น</span>
                     <div class="font-controls">
+                        <button class="btn-icon" onclick="adjustFontSize(-1)" title="ย่อขนาดฟอนต์">A-</button>
+                        <button class="btn-icon" onclick="adjustFontSize(1)" title="ขยายขนาดฟอนต์">A+</button>
                     </div>
                 </div>
                 <pre id="commandOutput"></pre>
