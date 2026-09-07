@@ -22,7 +22,7 @@
             --text-sub: #94a3b8;
             --border-color: #475569;
             --highlight: #f43f5e;
-            --code-font-size: 15px;
+            --code-font-size: 13px;
         }
 
         * {
@@ -129,7 +129,10 @@
         }
 
         @media (max-width: 480px) {
+            body { padding: 10px; }
+            .card { padding: 16px; }
             .grid-2 { grid-template-columns: 1fr; }
+            pre { padding: 8px 10px !important; }
         }
 
         .btn {
@@ -230,21 +233,22 @@
         }
 
         pre {
-            padding: 16px;
+            padding: 12px 16px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: var(--code-font-size);
+            font-size: clamp(9px, 2.5vw, var(--code-font-size));
+            letter-spacing: -0.3px;
             line-height: 1.6;
             color: #38bdf8;
-            white-space: pre-wrap;
-            word-break: break-all;
+            white-space: pre;       /* ป้องกันการตัดขึ้นบรรทัดใหม่ */
+            overflow-x: hidden;      /* ไม่แสดงแถบสโครลบาร์ข้ามขอบ */
         }
 
         .highlight {
             color: var(--highlight);
             font-weight: 600;
             background: rgba(244, 63, 94, 0.15);
-            padding: 1px 4px;
-            border-radius: 4px;
+            padding: 1px 2px;
+            border-radius: 3px;
         }
 
         .result-actions {
@@ -319,6 +323,7 @@
             <footer>
                 พัฒนาโดย<br>
                 <strong>นาย ศุเมธาณร์ เกิดผล (ช่างเทคนิค)</strong>
+                <p>ขอรหัสผ่านโทร 062-190-6263 หรือ 090-989-9498</p>
             </footer>
         </div>
 
@@ -376,14 +381,12 @@
                 <div class="result-header">
                     <span class="result-title">คำสั่งที่ถูกสร้างขึ้น</span>
                     <div class="font-controls">
-                        <button class="btn-icon" onclick="adjustFontSize(-1)" title="ย่อขนาดฟอนต์">A-</button>
-                        <button class="btn-icon" onclick="adjustFontSize(1)" title="ขยายขนาดฟอนต์">A+</button>
                     </div>
                 </div>
                 <pre id="commandOutput"></pre>
                 
                 <div class="result-actions">
-                    <button class="btn btn-secondary btn-full" onclick="openManual()">📖 คู่มือการ ConfigAP</button>
+                    <button class="btn btn-secondary btn-full" onclick="openManual()">📖 คู่มือการ ConfigAP ได้ที่นี่ "คลิก"</button>
                     <button class="btn btn-secondary btn-full" onclick="openVideo()">🎬 ดูวิดีโอสอน configAP ได้ที่นี่ "คลิก"</button>
                     <button class="btn btn-warning" onclick="copyToClipboard()">📋 คัดลอกคำสั่ง</button>
                     <button class="btn btn-primary" onclick="downloadCommands()">💾 ดาวน์โหลด .txt</button>
@@ -401,7 +404,7 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        let currentFontSize = 15;
+        let currentFontSize = 13;
 
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -424,7 +427,7 @@
         }
 
         function adjustFontSize(delta) {
-            currentFontSize = Math.min(Math.max(11, currentFontSize + delta), 22);
+            currentFontSize = Math.min(Math.max(8, currentFontSize + delta), 18);
             document.documentElement.style.setProperty('--code-font-size', `${currentFontSize}px`);
         }
 
@@ -457,8 +460,8 @@
 
             // ชุดผ่านเข้าใช้งานตามประเภท AP (ใช้ คำว่า หรือ)
             const authCmds = apType === 'old' 
-                ? ['admin หรือ Cisco', 'Store2015 หรือ Cisco', 'enable', 'Store2015 หรือ Cisco']
-                : ['Cisco หรือ admin', 'Cisco หรือ Store2015', 'enable', 'Cisco หรือ Store2015'];
+                ? ['admin หรือใส่ Cisco', 'Store2015 หรือใส่ Cisco', 'enable', 'Store2015 หรือใส่ Cisco']
+                : ['Cisco หรือใส่ admin', 'Cisco หรือใส่ Store2015', 'enable', 'Cisco หรือใส่ Store2015'];
 
             // คำสั่งตั้งค่าเฉพาะแต่ละรุ่น
             let capwapCmds = [];
