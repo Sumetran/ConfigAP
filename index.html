@@ -3,528 +3,711 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConfigAP - Cisco Access Point Configuration Tool</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
+    <title>ConfigAP</title>
     <style>
-        :root {
-            --bg-primary: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.85);
-            --bg-input: #334155;
-            --accent-blue: #3b82f6;
-            --accent-blue-hover: #2563eb;
-            --accent-yellow: #eab308;
-            --accent-yellow-hover: #ca8a04;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --border-color: #475569;
-            --highlight: #f43f5e;
-            --code-font-size: 13px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Kanit', sans-serif;
-            background: radial-gradient(circle at top, #1e293b, #0f172a);
-            color: var(--text-main);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            margin: 0;
         }
-
-        .container {
-            width: 100%;
-            max-width: 620px;
+        .form-container {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #00000033;
+            display: none; /* ซ่อนฟอร์มเริ่มต้น */
         }
-
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            animation: fadeIn 0.4s ease;
+        .form1-container {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #00000033;
+            display: none; /* ซ่อนฟอร์มเริ่มต้น */
         }
-
-        .card.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .header {
+        h1 {
             text-align: center;
-            margin-bottom: 24px;
+            color: #333;
+            margin-bottom: 30px;
         }
-
-        .header h1 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 6px;
+        input {
+            width: 95%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
-
-        .header p {
-            color: var(--text-sub);
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            color: var(--text-sub);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px 16px;
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-        }
-
         select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%252394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 18px;
-            cursor: pointer;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 10px; }
-            .card { padding: 16px; }
-            .grid-2 { grid-template-columns: 1fr; }
-            pre { padding: 8px 10px !important; }
-        }
-
-        .btn {
             width: 100%;
-            padding: 12px 20px;
-            border-radius: 10px;
-            border: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            font-family: inherit;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            margin-top: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary {
-            background-color: var(--accent-blue);
+        button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #4CAF50;
             color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        .btn-primary:hover {
-            background-color: var(--accent-blue-hover);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
-        }
-
-        .btn-secondary {
-            background-color: var(--bg-input);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-        }
-        .btn-secondary:hover {
-            background-color: var(--border-color);
+        button:active {
+            transition: transform 0.3s ease; /* การเปลี่ยนแปลง */
+            transform: scale(0.95); /* ขนาดเมื่อคลิก */
+            background-color: #45a049; /* เปลี่ยนสีเมื่อคลิก */
         }
 
-        .btn-warning {
-            background-color: var(--accent-yellow);
-            color: #0f172a;
-            font-weight: 600;
+        button1 {
+            margin: 100px 0;
+            width: 100%;
+            padding: 15px;
+            background-color: #e7b10a;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        .btn-warning:hover {
-            background-color: var(--accent-yellow-hover);
+
+        button1:active {
+            transition: transform 0.3s ease; /* การเปลี่ยนแปลง */
+            transform: scale(0.95); /* ขนาดเมื่อคลิก */
+            background-color: #d4bc74; /* เปลี่ยนสีเมื่อคลิก */
         }
 
         .result-box {
-            margin-top: 24px;
-            background-color: #090d16;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            display: none;
-            animation: fadeIn 0.3s ease;
+            background: #e7f3fe;
+            border: 1px solid #b3d7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 16px;
+            display: none; /* ซ่อนกล่องผลลัพธ์เริ่มต้น */
         }
-
-        .result-header {
-            background-color: #111827;
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .result-title {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            font-weight: 500;
-        }
-
-        .font-controls {
-            display: flex;
-            gap: 6px;
-        }
-
-        .btn-icon {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-sub);
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-        .btn-icon:hover {
-            color: #ffffff;
-            background-color: var(--bg-input);
-        }
-
         pre {
-            padding: 12px 16px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(5px, 2.5vw, var(--code-font-size));
-            letter-spacing: -0.3px;
-            line-height: 1.6;
-            color: #38bdf8;
-            white-space: pre;       /* ป้องกันการตัดขึ้นบรรทัดใหม่ */
-            overflow-x: scroll;      /* ไม่แสดงแถบสโครลบาร์ข้ามขอบ */
+            white-space: pre-wrap; /* ทำให้ข้อความยาวแสดงในบรรทัดใหม่ */
         }
-
         .highlight {
-            color: var(--highlight);
-            font-weight: 600;
-            background: rgba(244, 63, 94, 0.15);
-            padding: 1px 2px;
-            border-radius: 3px;
+            color: #ff0000; /* ทำให้ตัวที่เปลี่ยนมีสีแดง */
+            font-weight: bold; /* ทำให้ตัวที่เปลี่ยนตัวหนา */
         }
-
-        .result-actions {
-            padding: 12px 16px;
-            background-color: #111827;
-            border-top: 1px solid var(--border-color);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .result-actions .btn-full {
-            grid-column: span 2;
-        }
-
-        footer {
-            margin-top: 24px;
+        footer{ 
+            margin-top: 20px;
+            background: #ffffff;
+            color: #919191;
             text-align: center;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-sub);
-            font-size: 0.82rem;
-            line-height: 1.4;
-        }
-
-        footer strong {
-            color: var(--text-main);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background-color: #10b981;
-            color: #ffffff;
-            padding: 12px 20px;
+            position: relative;
+            bottom: 0;
+            padding: 1px;
             border-radius: 10px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            pointer-events: none;
-            z-index: 1000;
+            box-shadow: 0 0 15px #00000033;
         }
-        .toast.error {
-            background-color: #ef4444;
-        }
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- หน้าจอเข้าสู่ระบบ -->
-        <div id="loginCard" class="card active">
-            <div class="header">
-                <h1>เข้าสู่ระบบ</h1>
-                <p>ระบบสร้างคำสั่ง Configuration สำหรับ Cisco AP</p>
-            </div>
-            <div class="form-group">
-                <label for="password">รหัสผ่านเข้าใช้งาน</label>
-                <input type="password" id="password" placeholder="กรอกรหัสผ่านที่นี่" onkeyup="if(event.key==='Enter') checkPassword()">
-            </div>
-            <button class="btn btn-primary" onclick="checkPassword()">เข้าสู่ระบบ</button>
-            <footer>
-                พัฒนาโดย<br>
-                <strong>นาย ศุเมธาณร์ เกิดผล (ช่างเทคนิค)</strong>
-                <p>ขอรหัสผ่านโทร 062-190-6263 หรือ 090-989-9498</p>
-            </footer>
-        </div>
-
-        <!-- หน้าจอ Config AP -->
-        <div id="configCard" class="card">
-            <div class="header">
-                <h1>เชื่อมต่ออุปกรณ์ Access Point</h1>
-                <p>กรอกข้อมูลเพื่อสร้างคำสั่งอัตโนมัติ</p>
-            </div>
-
-            <div class="form-group">
-                <label for="storeCode">รหัสร้านสาขา (4 หรือ 5 หลัก)</label>
-                <input type="text" id="storeCode" maxlength="5" placeholder="ตัวอย่าง: 1234 หรือ 01234" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="apType">ประเภท AP</label>
-                    <select id="apType">
-                        <option value="">-- เลือกประเภท AP --</option>
-                        <option value="old">AP ตัวเก่า</option>
-                        <option value="new">AP ตัวใหม่</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="apModel">รุ่น AP</label>
-                    <select id="apModel">
-                        <option value="">-- เลือกรุ่น AP --</option>
-                        <option value="1041">1041</option>
-                        <option value="1602">1602</option>
-                        <option value="1702">1702</option>
-                        <option value="1832">1832</option>
-                        <option value="9105">9105</option>
-                        <option value="9115">9115</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="apSelection">ลำดับ AP</label>
-                <select id="apSelection">
-                    <option value="">-- เลือก AP ตัวที่ --</option>
-                    <option value="1">AP ตัวที่ 1</option>
-                    <option value="2">AP ตัวที่ 2</option>
-                    <option value="3">AP ตัวที่ 3</option>
-                    <option value="4">AP ตัวที่ 4</option>
-                    <option value="5">AP ตัวที่ 5</option>
-                </select>
-            </div>
-
-            <button class="btn btn-primary" onclick="generateCommands()">สร้างชุดคำสั่ง</button>
-
-            <!-- กล่องแสดงผลลัพธ์ -->
-            <div id="resultBox" class="result-box">
-                <div class="result-header">
-                    <span class="result-title">คำสั่งที่ถูกสร้างขึ้น</span>
-                    <div class="font-controls">
-                        <button class="btn-icon" onclick="adjustFontSize(-1)" title="ย่อขนาดฟอนต์">A-</button>
-                        <button class="btn-icon" onclick="adjustFontSize(1)" title="ขยายขนาดฟอนต์">A+</button>
-                    </div>
-                </div>
-                <pre id="commandOutput"></pre>
-                
-                <div class="result-actions">
-                    <button class="btn btn-secondary btn-full" onclick="openManual()">📖 คู่มือการ ConfigAP ได้ที่นี่ "คลิก"</button>
-                    <button class="btn btn-secondary btn-full" onclick="openVideo()">🎬 ดูวิดีโอสอน configAP ได้ที่นี่ "คลิก"</button>
-                    <button class="btn btn-warning" onclick="copyToClipboard()">📋 คัดลอกคำสั่ง</button>
-                    <button class="btn btn-primary" onclick="downloadCommands()">💾 ดาวน์โหลด .txt</button>
-                </div>
-            </div>
-
-            <footer>
-                พัฒนาโดย<br>
-                <strong>นาย ศุเมธาณร์ เกิดผล (ช่างเทคนิค)</strong>
-            </footer>
-        </div>
+    <div id="loginForm" class="form1-container">
+        <h1>เข้าสู่ระบบ</h1>
+        <label for="password">รหัสผ่าน:</label>
+        <input type="password" id="password" name="password" required placeholder="กรุณากรอกรหัสผ่านที่นี่">
+        <button onclick="checkPassword()">ล็อกอิน</button>
+        <footer>
+            <h4>พัฒนาโดย</h4>
+            <h4>ศุเมธาณร์ เกิดผล ช่างเทคนิค</h4>
+            <h6>Email: sumetranthailand@gmail.com & ID Line: sumetran_kertpol</h6>
+        </footer>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+    <div id="storeCodeForm" class="form-container">
+        <h1>เชื่อมต่ออุปกรณ์ Access Point</h1>
+        <label for="storeCode">ใส่รหัสร้านสาขา (4 หรือ 5 หลัก):</label>
+        <input type="text" id="storeCode" name="storeCode" required minlength="4" maxlength="5" pattern="\d{5}" title="กรุณากรอกตัวเลข 4-5 หลัก" oninput="this.value = this.value.replace(/[^0-9]/g, '');"placeholder="รหัสร้าน 4 หลักไม่ต้องใส่ 0 นำหน้า เช่น 1234 , 4321 , 8899">
+        
+        <label for="apType">เลือกประเภท AP:</label>
+        <select id="apType" name="apType">
+            <option value="">-- เลือกประเภท AP --</option>
+            <option value="old">AP ตัวเก่า</option>
+            <option value="new">AP ตัวใหม่</option>
+        </select>
+
+        <label for="apModel">เลือกรุ่น AP:</label>
+        <select id="apModel" name="apModel">
+            <option value="">-- เลือกรุ่น AP --</option>
+            <option value="1041">1041</option>
+            <option value="1602">1602</option>
+            <option value="1702">1702</option>
+            <option value="1832">1832</option>
+            <option value="9105">9105</option>
+            <option value="9115">9115</option>
+        </select>
+
+        <label for="apSelection">เลือก AP ตัวที่:</label>
+        <select id="apSelection" name="apSelection">
+            <option value="">-- เลือก AP ตัวที่ --</option>
+            <option value="1">AP ตัวที่ 1</option>
+            <option value="2">AP ตัวที่ 2</option>
+            <option value="3">AP ตัวที่ 3</option>
+            <option value="4">AP ตัวที่ 4</option>
+            <option value="5">AP ตัวที่ 5</option>
+        </select>
+        
+        <button onclick="validateStoreCode()">ยืนยัน</button>
+        <h1></h1>
+        <h1></h1>
+        <button1 onclick="decreaseFontSize1()" >-- ย่อขนาดฟอนต์</button1>
+        <button1 onclick="decreaseFontSize2()" >++ เพิ่มขนาดฟอนต์</button1>
+
+        <div id="resultBox" class="result-box">
+            <h2>คำสั่งที่สร้าง:</h2>
+            <pre id="commandOutput"></pre>
+            
+            <button class="button" onclick="window.location.href='https://drive.google.com/file/d/1oNBMWLCyphCE8JfQoWVckKdeQb2RatIo/view?usp=drive_link'">คู่มือการ ConfigAP</button>
+            <button onclick="copyToClipboard()">คัดลอกคำสั่ง</button>
+            <button onclick="downloadCommands()">ดาวน์โหลดคำสั่งเป็นไฟล์ .txt</button>
+
+        </div>
+         <footer>
+            <h4>พัฒนาโดย</h4>
+            <h4>ศุเมธาณร์ เกิดผล ช่างเทคนิค</h4>
+            <h4>Email: sumetranthailand@gmail.com & ID Line: sumetran_kertpol</h4>
+        </footer>
+    </div>
 
     <script>
-        let currentFontSize = 13;
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => {
-                toast.className = 'toast';
-            }, 3000);
-        }
+        document.getElementById('loginForm').style.display = 'block';
 
         function checkPassword() {
-            const pwd = document.getElementById('password').value;
-            if (pwd === '1111') {
-                document.getElementById('loginCard').classList.remove('active');
-                document.getElementById('configCard').classList.add('active');
-                showToast('เข้าสู่ระบบสำเร็จ');
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === '1111') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('storeCodeForm').style.display = 'block';
             } else {
-                showToast('รหัสผ่านไม่ถูกต้อง!', 'error');
+                alert('รหัสผ่านไม่ถูกต้อง!');
             }
         }
 
-        function adjustFontSize(delta) {
-            currentFontSize = Math.min(Math.max(8, currentFontSize + delta), 18);
-            document.documentElement.style.setProperty('--code-font-size', `${currentFontSize}px`);
+        function decreaseFontSize1() {
+            const text = document.getElementById('resultBox');
+            let currentSize = window.getComputedStyle(text).fontSize;
+            let newSize = parseFloat(currentSize) - 2; // ลดขนาดฟอนต์ 2px
+            text.style.fontSize = newSize + 'px';
         }
 
-        function generateCommands() {
-            const storeCode = document.getElementById('storeCode').value.trim();
-            const apType = document.getElementById('apType').value;
-            const apModel = document.getElementById('apModel').value;
-            const selection = document.getElementById('apSelection').value;
+        function decreaseFontSize2() {
+            const text = document.getElementById('resultBox');
+            let currentSize = window.getComputedStyle(text).fontSize;
+            let newSize = parseFloat(currentSize) + 2; // ลดขนาดฟอนต์ 2px
+            text.style.fontSize = newSize + 'px';
+        }
 
-            if (!/^\d{4,5}$/.test(storeCode)) {
-                showToast('กรุณากรอกรหัสร้านให้ถูกต้อง (4 หรือ 5 หลัก)', 'error');
-                return;
-            }
-            if (!apType || !apModel || !selection) {
-                showToast('กรุณากรอกข้อมูลและเลือกรุ่นให้ครบถ้วน', 'error');
-                return;
-            }
+        function validateStoreCode() {
+            const storeCodeInput = document.getElementById('storeCode').value;
+            const apTypeInput = document.getElementById('apType').value;
+            const apModelInput = document.getElementById('apModel').value;
+            const apSelectionInput = document.getElementById('apSelection').value;
 
-            // คำนวณ IP และ Gateway ตามความยาวรหัสสาขา
-            let ipFormatted, gwFormatted;
-            if (storeCode.length === 4) {
-                const [a, b, c, d] = storeCode;
-                ipFormatted = `117.1<span class="highlight">${a}${b}</span>.1<span class="highlight">${c}${d}</span>.10<span class="highlight">${selection}</span>`;
-                gwFormatted = `117.1<span class="highlight">${a}${b}</span>.1<span class="highlight">${c}${d}</span>.110`;
-            } else {
-                const [_, b, c, d, e] = storeCode;
-                ipFormatted = `111.1<span class="highlight">${b}${c}</span>.1<span class="highlight">${d}${e}</span>.10<span class="highlight">${selection}</span>`;
-                gwFormatted = `111.1<span class="highlight">${b}${c}</span>.1<span class="highlight">${d}${e}</span>.110`;
-            }
+            if (storeCodeInput.length === 4 && apModelInput === "1041" && apTypeInput === "old") {
+                generateCommands10414old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1602" && apTypeInput === "old") { 
+                generateCommands16024old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1702" && apTypeInput === "old") { 
+                generateCommands17024old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1832" && apTypeInput === "old") { 
+                generateCommands18324old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9105" && apTypeInput === "old") { 
+                generateCommands91054old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9115" && apTypeInput === "old") { 
+                generateCommands91154old(storeCodeInput, apSelectionInput);
 
-            // ชุดผ่านเข้าใช้งานตามประเภท AP (ใช้ คำว่า หรือ)
-            const authCmds = apType === 'old' 
-                ? ['admin หรือใส่ Cisco', 'Store2015 หรือใส่ Cisco', 'enable', 'Store2015 หรือใส่ Cisco']
-                : ['Cisco หรือใส่ admin', 'Cisco หรือใส่ Store2015', 'enable', 'Cisco หรือใส่ Store2015'];
+            } else if(storeCodeInput.length === 4 && apModelInput === "1041" && apTypeInput === "new") {
+                generateCommands10414new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1602" && apTypeInput === "new") { 
+                generateCommands16024new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1702" && apTypeInput === "new") { 
+                generateCommands17024new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "1832" && apTypeInput === "new") { 
+                generateCommands18324new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9105" && apTypeInput === "new") { 
+                generateCommands91054new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 4 && apModelInput === "9115" && apTypeInput === "new") { 
+                generateCommands91154new(storeCodeInput, apSelectionInput);
 
-            // คำสั่งตั้งค่าเฉพาะแต่ละรุ่น
-            let capwapCmds = [];
-            if (['1041', '1602', '1702'].includes(apModel)) {
-                const controllerIp = apModel === '1041' ? '10.160.103.13' : '10.160.103.43';
-                capwapCmds = [
-                    `capwap ap ip address ${ipFormatted} 255.255.255.0`,
-                    `capwap ap ip default-gateway ${gwFormatted}`,
-                    `capwap ap controller ip address ${controllerIp}`,
-                    'show capwap ip config'
-                ];
-            } else if (apModel === '1832') {
-                capwapCmds = [
-                    `capwap ap ip ${ipFormatted} 255.255.255.0 ${gwFormatted}`,
-                    'capwap ap primary-base TARWLC03 10.160.103.43',
-                    'show capwap ip config'
-                ];
-            } else if (['9105', '9115'].includes(apModel)) {
-                capwapCmds = [
-                    `capwap ap ip ${ipFormatted} 255.255.255.0 ${gwFormatted}`,
-                    'capwap ap primary-base TARWLC07 10.160.103.69',
-                    'show capwap ip config'
-                ];
-            }
+            } else if(storeCodeInput.length === 5 && apModelInput === "1041" && apTypeInput === "old") {
+                generateCommands10415old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1602" && apTypeInput === "old") { 
+                generateCommands16025old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1702" && apTypeInput === "old") { 
+                generateCommands17025old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1832" && apTypeInput === "old") { 
+                generateCommands18325old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9105" && apTypeInput === "old") { 
+                generateCommands91055old(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9115" && apTypeInput === "old") { 
+                generateCommands91155old(storeCodeInput, apSelectionInput);
 
-            const allCommands = [...authCmds, ...capwapCmds];
-            
-            document.getElementById('commandOutput').innerHTML = allCommands.join('\n');
+            } else if(storeCodeInput.length === 5 && apModelInput === "1041" && apTypeInput === "new") {
+                generateCommands10415new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1602" && apTypeInput === "new") { 
+                generateCommands16025new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1702" && apTypeInput === "new") { 
+                generateCommands17025new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "1832" && apTypeInput === "new") { 
+                generateCommands18325new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9105" && apTypeInput === "new") { 
+                generateCommands91055new(storeCodeInput, apSelectionInput);
+            } else if(storeCodeInput.length === 5 && apModelInput === "9115" && apTypeInput === "new") { 
+                generateCommands91155new(storeCodeInput, apSelectionInput);
+                
+            } else {}
+        }
+
+        function generateCommands10414old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco' ,
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands16024old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands17024old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands18324old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91054old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91154old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands10414new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands16024new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands17024new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip address 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands18324new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91054new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+        function generateCommands91154new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 117.1<span class="highlight">${abcd[0]}${abcd[1]}</span>.1<span class="highlight">${abcd[2]}${abcd[3]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+
+
+
+
+
+
+            function generateCommands10415old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands16025old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands17025old(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands18325old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91055old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91155old(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'admin / Cisco',
+                'Store2015 / Cisco',
+                'enable',
+                'Store2015 / Cisco',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+            function generateCommands10415new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.13`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands16025new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config'
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands17025new(storeCode, selection, controllerIp) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip address 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0`,
+                `capwap ap ip default-gateway 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.110`,
+                `capwap ap controller ip address 10.160.103.43`,
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands18325new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC03 10.160.103.43',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91055new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config',
+            ];
+
+            displayCommands(commands);
+        }
+
+        function generateCommands91155new(storeCode, selection) {
+            const abcd = storeCode;
+
+            const commands = [
+                'Cisco / admin',
+                'Cisco / Store2015',
+                'enable',
+                'Cisco / Store2015',
+                `capwap ap ip 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span>.10<span class="highlight">${selection}</span> 255.255.255.0 111.1<span class="highlight">${abcd[1]}${abcd[2]}</span>.1<span class="highlight">${abcd[3]}${abcd[4]}</span><span>.110</span>`,
+                'capwap ap primary-base TARWLC07 10.160.103.69',
+                'show capwap ip config'
+            ];
+
+            displayCommands(commands);
+        }
+
+        function displayCommands(commands) {
+            document.getElementById('commandOutput').innerHTML = commands.join('\n');
             document.getElementById('resultBox').style.display = 'block';
-            showToast('สร้างชุดคำสั่งสำเร็จ!');
         }
 
-        function openManual() {
-            window.open('https://drive.google.com/file/d/1oNBMWLCyphCE8JfQoWVckKdeQb2RatIo/view?usp=drive_link', '_blank');
-        }
-
-        function openVideo() {
-            window.open('https://drive.google.com/file/d/1mm8aMMh4MuHvnlWPOcwERaJLsmnzIj4j/view?usp=drive_link', '_blank');
-        }
-
-        async function copyToClipboard() {
-            const commandText = document.getElementById('commandOutput').innerText;
-            try {
-                await navigator.clipboard.writeText(commandText);
-                showToast('คัดลอกคำสั่งเรียบร้อยแล้ว!');
-            } catch (err) {
-                showToast('ไม่สามารถคัดลอกได้', 'error');
-            }
+        function copyToClipboard() {
+            const commandOutput = document.getElementById('commandOutput').innerText;
+            navigator.clipboard.writeText(commandOutput).then(() => {
+                alert('คัดลอกคำสั่งเรียบร้อยแล้ว!');
+            }).catch(err => {
+                alert('ไม่สามารถคัดลอกคำสั่งได้: ', err);
+            });
         }
 
         function downloadCommands() {
-            const commandText = document.getElementById('commandOutput').innerText;
-            const storeCode = document.getElementById('storeCode').value || 'Store';
-            const blob = new Blob([commandText], { type: 'text/plain;charset=utf-8' });
+            const commandOutput = document.getElementById('commandOutput').innerText;
+            const blob = new Blob([commandOutput], { type: 'text/plain' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `AP_Config_${storeCode}.txt`;
+            link.download = 'คำสั่งที่สร้าง.txt'; // ชื่อไฟล์ที่ต้องการดาวน์โหลด
+            document.body.appendChild(link);
             link.click();
-            URL.revokeObjectURL(link.href);
-            showToast('ดาวน์โหลดไฟล์คำสั่งเรียบร้อย!');
+            document.body.removeChild(link);
         }
     </script>
 </body>
+
 </html>
